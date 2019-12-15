@@ -9,6 +9,7 @@ class SignInPage extends StatelessWidget {
         elevation: 2.0,
       ),
       body: _buildContent(),
+      backgroundColor: Colors.grey[200],
     );
   }
 
@@ -29,29 +30,23 @@ class SignInPage extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
-          Container(
-            color: Colors.black,
-            child: SizedBox(
-              height: 100.0,
+          RaisedButton(
+            child: Text(
+              'Sign in with Google',
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 15.0,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Container(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            onPressed: () {
+              print('Button pressed');
+            },
             color: Colors.white,
-            child: SizedBox(
-              height: 100.0,
-            ),
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Container(
-            color: Colors.green,
-            child: SizedBox(
-              height: 100.0,
-            ),
           ),
         ],
       ),
