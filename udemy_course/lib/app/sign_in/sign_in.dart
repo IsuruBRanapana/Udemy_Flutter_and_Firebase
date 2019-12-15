@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_course/common_widgets/custom_raised_buttons.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -30,7 +31,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
-          RaisedButton(
+          CustomRaisedButton(
             child: Text(
               'Sign in with Google',
               style: TextStyle(
@@ -38,15 +39,9 @@ class SignInPage extends StatelessWidget {
                 fontSize: 15.0,
               ),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-            ),
-            onPressed: () {
-              print('Button pressed');
-            },
             color: Colors.white,
+            onPressed: (){},
+            borderRadius: 10.0,
           ),
         ],
       ),

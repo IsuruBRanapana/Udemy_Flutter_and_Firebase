@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
 class CustomRaisedButton extends StatelessWidget {
-  
+
+  CustomRaisedButton({this.child,this.color,this.borderRadius,this.onPressed});
+  final Widget child;
+  final VoidCallback onPressed;
+  final double borderRadius;
+  final Color color;
+
+
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      child: Text(
-        'Sign in with Google',
-        style: TextStyle(
-          color: Colors.black87,
-          fontSize: 15.0,
-        ),
-      ),
+      child: child,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+          Radius.circular(borderRadius),
         ),
       ),
-      onPressed: () {
-        print('Button pressed');
-      },
-      color: Colors.white,
+      onPressed: onPressed,
+      color: color,
     );
   }
 }
