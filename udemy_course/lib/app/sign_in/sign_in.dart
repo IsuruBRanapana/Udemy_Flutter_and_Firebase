@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_course/app/sign_in/sign_in_button.dart';
+import 'package:udemy_course/app/sign_in/social_sign_in_button.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -32,8 +33,9 @@ class SignInPage extends StatelessWidget {
           SizedBox(
             height: 48.0,
           ),
-          SignInButton(
+          SocialSignInButton(
             text: 'Sign In with Google',
+            assetName: 'images/google-logo.png',
             color: Colors.white,
             onPressed: (){},
             textColor: Colors.black87,
@@ -42,7 +44,8 @@ class SignInPage extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
-          SignInButton(
+          SocialSignInButton(
+            assetName: 'images/facebook-logo.png',
             text: 'Sign In with Facebook',
             color: Color(0xFF334D92),
             onPressed: (){},
