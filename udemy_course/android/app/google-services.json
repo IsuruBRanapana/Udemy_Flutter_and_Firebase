@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "921576507255",
+    "firebase_url": "https://udemy-time-tracker.firebaseio.com",
+    "project_id": "udemy-time-tracker",
+    "storage_bucket": "udemy-time-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921576507255:android:3e2902764b2a6405434372",
+        "android_client_info": {
+          "package_name": "com.example.udemy_course"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921576507255-h8ggego2f2qp9jpd7llap4g5lcchlkfs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.udemy_course",
+            "certificate_hash": "d0bb7525914f5e29ffef37355f2dbc928b9c8469"
+          }
+        },
+        {
+          "client_id": "921576507255-v9jd59qdl7a8c2aj1sefgm7i5cght1q3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_-dVWAhDn_eRRsJc-X_p-_wRJW5ST500"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921576507255-v9jd59qdl7a8c2aj1sefgm7i5cght1q3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
