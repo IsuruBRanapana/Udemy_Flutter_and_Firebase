@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_course/app/sign_in/sign_in_button.dart';
 import 'package:udemy_course/app/sign_in/social_sign_in_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatelessWidget {
+  Future<void> _signInAnonymously() async {
+    try {
+      final authResult = await FirebaseAuth.instance.signInAnonymously();
+      print('${authResult.user.uid}');
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +47,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign In with Google',
             assetName: 'images/google-logo.png',
             color: Colors.white,
-            onPressed: (){},
+            onPressed: () {},
             textColor: Colors.black87,
             height: 40.0,
           ),
@@ -48,7 +58,7 @@ class SignInPage extends StatelessWidget {
             assetName: 'images/facebook-logo.png',
             text: 'Sign In with Facebook',
             color: Color(0xFF334D92),
-            onPressed: (){},
+            onPressed: () {},
             textColor: Colors.white,
             height: 40.0,
           ),
@@ -58,7 +68,7 @@ class SignInPage extends StatelessWidget {
           SignInButton(
             text: 'Sign In with Email',
             color: Colors.teal[700],
-            onPressed: (){},
+            onPressed: () {},
             textColor: Colors.white,
             height: 40.0,
           ),
@@ -66,10 +76,8 @@ class SignInPage extends StatelessWidget {
             height: 8.0,
           ),
           Text(
-              'or',
-            style: TextStyle(
-              fontSize: 14.0
-            ),
+            'or',
+            style: TextStyle(fontSize: 14.0),
             textAlign: TextAlign.center,
           ),
           SizedBox(
@@ -78,7 +86,7 @@ class SignInPage extends StatelessWidget {
           SignInButton(
             text: 'Sign In Anonymous',
             color: Colors.lime[300],
-            onPressed: (){},
+            onPressed: _signInAnonymously,
             textColor: Colors.black,
             height: 40.0,
           ),
