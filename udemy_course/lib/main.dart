@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_course/app/sign_in/sign_in.dart';
+import 'package:udemy_course/app/landing_page.dart';
 
 void main(){
   runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: SignInPage(),
+      home: LandingPage(),
     );
   }
 }
