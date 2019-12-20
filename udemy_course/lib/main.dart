@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_course/app/landing_page.dart';
+import 'package:udemy_course/services/auth.dart';
 
 void main(){
   runApp(MyApp());
@@ -13,7 +14,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: LandingPage(),
+      home: LandingPage(
+        auth: Auth(),
+      ),
     );
   }
 }
