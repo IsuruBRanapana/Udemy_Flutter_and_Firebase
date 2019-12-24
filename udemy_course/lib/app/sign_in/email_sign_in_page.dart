@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:udemy_course/app/sign_in/email_sign_in_form.dart';
 import 'package:udemy_course/services/auth.dart';
 
-
 class EmailSignInPage extends StatelessWidget {
   EmailSignInPage({@required this.auth});
   final AuthBase auth;
@@ -13,9 +12,15 @@ class EmailSignInPage extends StatelessWidget {
         title: Text('Time Tracker'),
         elevation: 2.0,
       ),
-      body: Card(
-        margin: EdgeInsets.all(10.0),
-          child: EmailSignInForm(auth: auth,),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            child: EmailSignInForm(
+              auth: auth,
+            ),
+          ),
+        ),
       ),
       backgroundColor: Colors.grey[200],
     );
