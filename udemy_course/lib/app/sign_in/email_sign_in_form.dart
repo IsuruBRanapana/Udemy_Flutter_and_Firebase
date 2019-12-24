@@ -16,8 +16,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
+
 
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
   void _toogleFormType() {
@@ -28,6 +32,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     });
     _emailController.clear();
     _passwordController.clear();
+  }
+
+  void _gotoPasswordEditing(){
+    FocusScope.of(context).requestFocus(_passwordFocusNode);
+  }
+
+  void _updateState(){
+    setState(() {});
   }
 
   void _submit() async {
@@ -51,6 +63,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     final secondaryText = _formType == EmailSignInFormType.signIn
         ? 'Need an Account ? Register'
         : 'Have an Account ? Log in';
+
+    bool submitEnable = _email.isNotEmpty&&_password.isNotEmpty;
     return [
       _buildEmailField(),
       SizedBox(
@@ -62,7 +76,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
       FormSubmitButtons(
         text: primaryText,
-        onPressed: _submit,
+        onPressed: submitEnable?_submit:null,
       ),
       SizedBox(
         height: 8.0,
@@ -77,17 +91,21 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   TextField _buildPasswordField() {
     return TextField(
       controller: _passwordController,
+      focusNode: _passwordFocusNode,
       decoration: InputDecoration(
         labelText: 'Password',
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
+      onChanged: (password)=>_updateState(),
+      onEditingComplete: _submit,
     );
   }
 
   TextField _buildEmailField() {
     return TextField(
       controller: _emailController,
+      focusNode: _emailFocusNode,
       decoration: InputDecoration(
         labelText: 'Email',
         hintText: 'test@test.com',
@@ -95,6 +113,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
+      onChanged: (email)=>_updateState(),
+      onEditingComplete: _gotoPasswordEditing,
     );
   }
 
