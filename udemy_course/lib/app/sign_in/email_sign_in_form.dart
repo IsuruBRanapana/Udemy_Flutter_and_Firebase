@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:udemy_course/app/sign_in/validator.dart';
 import 'package:udemy_course/common_widgets/form_submit_buttons.dart';
+import 'package:udemy_course/common_widgets/platform_alert_dialog.dart';
 import 'package:udemy_course/services/auth.dart';
 
 enum EmailSignInFormType { signIn, Register }
@@ -61,21 +63,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       Navigator.of(context).pop();
     } catch (e) {
-      print(e.toString());
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Error Sign in'),
-              content: Text(e.toString()),
-              actions: <Widget>[
-                FlatButton(
-                  onPressed: () =>Navigator.of(context).pop(),
-                  child: Text('Ok'),
-                ),
-              ],
-            );
-          });
+      PlatformAlertDialog(
+        title:'Sign in Failed',
+        content: e.toString(),
+        defaultActionText: 'OK',
+      ).show(context);
     } finally {
       setState(() {
         _isLoading = false;
