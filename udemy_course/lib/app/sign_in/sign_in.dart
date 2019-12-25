@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_course/app/sign_in/email_sign_in_page.dart';
+import 'package:udemy_course/app/sign_in/sign_in_bloc.dart';
 import 'package:udemy_course/app/sign_in/sign_in_button.dart';
 import 'package:udemy_course/app/sign_in/social_sign_in_button.dart';
 import 'package:udemy_course/common_widgets/platform_exception_alert_dialog.dart';
@@ -8,6 +9,13 @@ import 'package:udemy_course/services/auth.dart';
 import 'package:flutter/services.dart';
 
 class SignInPage extends StatefulWidget {
+
+  static Widget create(BuildContext context){
+    return Provider<SignInBloc> (
+      create: (_)=>SignInBloc(),
+      child: SignInPage(),
+    );
+  }
   @override
   _SignInPageState createState() => _SignInPageState();
 }
@@ -85,30 +93,33 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<SignInBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Time Tracker'),
         elevation: 2.0,
       ),
-      body: _buildContent(context),
+      body: StreamBuilder<bool>(
+        stream: bloc.isLoadingStream,
+        initialData: false,
+        builder: (context, snapshot) {
+          return _buildContent(context,snapshot.data);
+        }
+      ),
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context,bool isLoading) {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            'Sign In',
-            style: TextStyle(
-              fontSize: 32.0,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.center,
+          SizedBox(
+            height: 50.0,
+            child: _headerWidgetBuilder(),
           ),
           SizedBox(
             height: 48.0,
@@ -117,7 +128,7 @@ class _SignInPageState extends State<SignInPage> {
             text: 'Sign In with Google',
             assetName: 'images/google-logo.png',
             color: Colors.white,
-            onPressed: () => _signInWithGoogle(context),
+            onPressed:_isLoading? null : () => _signInWithGoogle(context),
             textColor: Colors.black87,
             height: 40.0,
           ),
@@ -128,7 +139,7 @@ class _SignInPageState extends State<SignInPage> {
             assetName: 'images/facebook-logo.png',
             text: 'Sign In with Facebook',
             color: Color(0xFF334D92),
-            onPressed: () => _signInWithFacebook(context),
+            onPressed:_isLoading? null :  () => _signInWithFacebook(context),
             textColor: Colors.white,
             height: 40.0,
           ),
@@ -138,7 +149,7 @@ class _SignInPageState extends State<SignInPage> {
           SignInButton(
             text: 'Sign In with Email',
             color: Colors.teal[700],
-            onPressed: () => _signInWithEmail(context),
+            onPressed:_isLoading? null :  () => _signInWithEmail(context),
             textColor: Colors.white,
             height: 40.0,
           ),
@@ -156,12 +167,29 @@ class _SignInPageState extends State<SignInPage> {
           SignInButton(
             text: 'Sign In Anonymous',
             color: Colors.lime[300],
-            onPressed: () => _signInAnonymously(context),
+            onPressed:_isLoading? null :  () => _signInAnonymously(context),
             textColor: Colors.black,
             height: 40.0,
           ),
         ],
       ),
     );
+  }
+
+  Widget _headerWidgetBuilder() {
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Text(
+        'Sign In',
+        style: TextStyle(
+          fontSize: 32.0,
+          fontWeight: FontWeight.w600,
+        ),
+        textAlign: TextAlign.center,
+      );
+    }
   }
 }
