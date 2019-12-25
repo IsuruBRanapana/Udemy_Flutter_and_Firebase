@@ -3,34 +3,67 @@ import 'package:provider/provider.dart';
 import 'package:udemy_course/app/sign_in/email_sign_in_page.dart';
 import 'package:udemy_course/app/sign_in/sign_in_button.dart';
 import 'package:udemy_course/app/sign_in/social_sign_in_button.dart';
+import 'package:udemy_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:udemy_course/services/auth.dart';
+import 'package:flutter/services.dart';
 
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
 
-class SignInPage extends StatelessWidget {
+class _SignInPageState extends State<SignInPage> {
+  bool _isLoading = false;
+
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       final auth = Provider.of<AuthBase>(context);
       await auth.signInAnonymously();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (e) {
+      _showSignInErrors(context, e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       final auth = Provider.of<AuthBase>(context);
       await auth.signInWithGoogle();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (e) {
+      if (e.code != 'ERROR_ABORTED_BY_USER') {
+        _showSignInErrors(context, e);
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       final auth = Provider.of<AuthBase>(context);
       await auth.signInWithFacebook();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (e) {
+      if (e.code != 'ERROR_ABORTED_BY_USER') {
+        _showSignInErrors(context, e);
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -41,6 +74,13 @@ class SignInPage extends StatelessWidget {
         builder: (context) => EmailSignInPage(),
       ),
     );
+  }
+
+  void _showSignInErrors(BuildContext context, PlatformException exception) {
+    PlatformExceptionAlertDialog(
+      title: 'Sign In Fail',
+      exception: exception,
+    ).show(context);
   }
 
   @override
