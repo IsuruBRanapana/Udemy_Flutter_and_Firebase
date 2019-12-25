@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_course/common_widgets/platform_alert_dialog.dart';
 import 'package:udemy_course/services/auth.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,6 +14,18 @@ class HomePage extends StatelessWidget {
     }
   }
 
+  Future<void> _confirmSignOut(BuildContext context) async{
+    final didConfirm = await PlatformAlertDialog(
+      title:'Confirm Sign Out',
+      content: 'Do you Want to Sign Out',
+      cancelActionText: 'Cancel',
+      defaultActionText: 'Log out',
+    ).show(context);
+    if(didConfirm==true){
+      _signOut();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +35,7 @@ class HomePage extends StatelessWidget {
         ),
         actions: <Widget>[
           FlatButton(
-              onPressed:_signOut,
+              onPressed:()=>_confirmSignOut(context),
               child: Text(
                 'Logout',
                 style: TextStyle(color: Colors.white, fontSize: 18.0),
