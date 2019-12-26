@@ -15,6 +15,23 @@ class EmailSignInBloc {
     _modelController.close();
   }
 
+  void toggleFormType(){
+    final formType=_model.formType == EmailSignInFormType.signIn
+        ? EmailSignInFormType.Register
+        : EmailSignInFormType.signIn;
+    updateWith(
+      email: '',
+      password: '',
+      submitted: false,
+      formType: formType,
+      isLoading: false,
+    );
+  }
+
+  void updatePassword(String password) => updateWith(password: password);
+
+  void updateEmail(String email) => updateWith(email: email);
+
   void updateWith({
     String email,
     String password,
@@ -41,9 +58,8 @@ class EmailSignInBloc {
         await auth.createUserWithEmailAndPassword(_model.email, _model.password);
       }
     } catch (e) {
-      rethrow;
-    } finally {
       updateWith(isLoading: false);
+      rethrow;
     }
 }
 }
