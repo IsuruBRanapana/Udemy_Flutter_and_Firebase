@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_course/app/sign_in/email_sign_in_form_stateful.dart';
+import 'package:udemy_course/app/sign_in/email_sign_in_form_bloc_base.dart';
 
 class EmailSignInPage extends StatelessWidget {
   @override
@@ -13,7 +13,7 @@ class EmailSignInPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
-            child: EmailSignInFormStateful(),
+            child: EmailSignInFormBlocBase.create(context),
           ),
         ),
       ),
