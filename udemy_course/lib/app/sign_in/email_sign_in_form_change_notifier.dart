@@ -37,9 +37,10 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
 
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+  EmailSignInChangeModel get model =>widget.model;
 
   void _toogleFormType() {
-    widget.model.toggleFormType();
+    model.toggleFormType();
     _emailController.clear();
     _passwordController.clear();
   }
@@ -53,7 +54,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
     super.dispose();
   }
 
-  void _gotoPasswordEditing(EmailSignInModel model) {
+  void _gotoPasswordEditing() {
     final newFocus = model.emailValidator.isValid(model.email)
         ? _passwordFocusNode
         : _emailFocusNode;
@@ -63,7 +64,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
   Future<void> _submit() async {
 
     try {
-      await widget.model.submit();
+      await model.submit();
       Navigator.of(context).pop();
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
@@ -73,13 +74,13 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
     }
   }
 
-  List<Widget> _buildChildren(EmailSignInModel model) {
+  List<Widget> _buildChildren() {
     return [
-      _buildEmailField(model),
+      _buildEmailField(),
       SizedBox(
         height: 8.0,
       ),
-      _buildPasswordField(model),
+      _buildPasswordField(),
       SizedBox(
         height: 8.0,
       ),
@@ -97,7 +98,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
     ];
   }
 
-  TextField _buildPasswordField(EmailSignInModel model) {
+  TextField _buildPasswordField() {
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
@@ -108,12 +109,12 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
-      onChanged:widget.model.updatePassword,
+      onChanged:model.updatePassword,
       onEditingComplete: _submit,
     );
   }
 
-  TextField _buildEmailField(EmailSignInModel model) {
+  TextField _buildEmailField() {
     return TextField(
       controller: _emailController,
       focusNode: _emailFocusNode,
@@ -126,27 +127,20 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      onChanged:widget.model.updateEmail,
-      onEditingComplete: ()=>_gotoPasswordEditing(model),
+      onChanged:model.updateEmail,
+      onEditingComplete: ()=>_gotoPasswordEditing(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<EmailSignInModel>(
-      stream: widget.model.modelStream,
-      initialData: EmailSignInModel(),
-      builder: (context, snapshot) {
-        final EmailSignInModel model=snapshot.data;
         return Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
-            children: _buildChildren(model),
+            children: _buildChildren(),
           ),
         );
-      },
-    );
-  }
+      }
 }
