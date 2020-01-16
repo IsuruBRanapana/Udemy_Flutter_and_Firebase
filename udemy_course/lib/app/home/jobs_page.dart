@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_course/app/home/models/job.dart';
 import 'package:udemy_course/common_widgets/platform_alert_dialog.dart';
 import 'package:udemy_course/services/auth.dart';
 import 'package:udemy_course/services/database.dart';
@@ -25,14 +26,15 @@ class JobsPage extends StatelessWidget {
       _signOut(context);
     }
   }
-  Future <void> _createJob(BuildContext context) async{
-    final database=Provider.of<Database>(context);
-    await database.createJob({
-      'name':'Blogging',
-      'rate_per_hour':10,
-    });
 
+  Future<void> _createJob(BuildContext context) async {
+    final database = Provider.of<Database>(context);
+    await database.createJob(Job(
+      name: 'Painting',
+      ratePerHour: 12,
+    ));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,10 +54,8 @@ class JobsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: ()=>_createJob(context),
+        onPressed: () => _createJob(context),
       ),
     );
   }
-
-
 }
