@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_course/app/home/models/job.dart';
 import 'package:udemy_course/common_widgets/platform_alert_dialog.dart';
+import 'package:udemy_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:udemy_course/services/auth.dart';
 import 'package:udemy_course/services/database.dart';
+import 'package:flutter/services.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -28,11 +30,17 @@ class JobsPage extends StatelessWidget {
   }
 
   Future<void> _createJob(BuildContext context) async {
+    try{
     final database = Provider.of<Database>(context);
     await database.createJob(Job(
       name: 'Painting',
       ratePerHour: 12,
-    ));
+    ));}on PlatformException catch (e){
+      PlatformExceptionAlertDialog(
+        title: 'Operation Failed',
+        exception: e,
+      ).show(context);
+    }
   }
 
   @override
