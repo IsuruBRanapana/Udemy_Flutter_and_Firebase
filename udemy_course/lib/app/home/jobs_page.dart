@@ -79,6 +79,8 @@ class JobsPage extends StatelessWidget {
           return ListView(
             children: children,
           );
+        }if (snapshot.hasError){
+          return Center(child: Text('Some Error Occured'),);
         }
         return Center(child: CircularProgressIndicator(),);
       },
