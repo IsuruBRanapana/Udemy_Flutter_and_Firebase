@@ -13,7 +13,6 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
         );
 
   static String _message(PlatformException exception){
-    print(exception);
     return _errors[exception.code]??exception.message;
   }
 
