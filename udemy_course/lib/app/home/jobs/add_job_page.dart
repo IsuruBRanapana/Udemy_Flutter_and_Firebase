@@ -23,12 +23,23 @@ class _AddJobPageState extends State<AddJobPage> {
         title: Text('Add Job'),
       ),
       body: _buildContents(),
+      backgroundColor: Colors.grey[200],
     );
   }
 
   Widget _buildContents() {
-    return Card(
-      
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Placeholder(
+              fallbackHeight: 200,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
