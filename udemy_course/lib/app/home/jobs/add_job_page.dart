@@ -15,6 +15,24 @@ class AddJobPage extends StatefulWidget {
 }
 
 class _AddJobPageState extends State<AddJobPage> {
+  final _formKey=GlobalKey<FormState>();
+  String _name;
+  int _ratePerHour;
+
+  bool _validateAndSaveForm(){
+    final form=_formKey.currentState;
+    if(form.validate()){
+      form.save();
+      return true;
+    }
+    return false;
+  }
+  void _submit(){
+    if(_validateAndSaveForm()){
+      print('form saved name : $_name , rate per hour : $_ratePerHour');
+      //TODO : save in firestore
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +41,8 @@ class _AddJobPageState extends State<AddJobPage> {
         title: Text('Add Job'),
         actions: <Widget>[
           FlatButton(
-            child: Te,
+            child: Text('Save', style: TextStyle(fontSize: 18,color: Colors.white),),
+            onPressed: _submit,
           ),
         ],
       ),
@@ -48,6 +67,7 @@ class _AddJobPageState extends State<AddJobPage> {
 
   Widget _buildForm() {
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: _buildFormChildren(),
@@ -59,6 +79,8 @@ class _AddJobPageState extends State<AddJobPage> {
     return [
       TextFormField(
         decoration: InputDecoration(labelText: 'Job Name'),
+        onSaved: (value)=>_name=value,
+        validator: (value)=>value.isNotEmpty ? null : 'Name can\'t be empty',
       ),
       TextFormField(
         decoration: InputDecoration(labelText: 'Rate per hour'),
@@ -66,6 +88,7 @@ class _AddJobPageState extends State<AddJobPage> {
           signed: false,
           decimal: false,
         ),
+        onSaved:(value)=> _ratePerHour=int.parse(value)??0,
       ),
     ];
   }
