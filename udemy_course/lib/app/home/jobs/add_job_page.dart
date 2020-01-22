@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:udemy_course/services/database.dart';
 
 class AddJobPage extends StatefulWidget {
+  const AddJobPage({Key key, @required this.database}) : super(key: key);
+  final Database database;
+
+
   static Future<void> show(BuildContext context) async {
+    final database= Provider.of<Database>(context);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AddJobPage(),
+        builder: (context) => AddJobPage(database: database,),
         fullscreenDialog: true,
       ),
     );
@@ -31,6 +38,7 @@ class _AddJobPageState extends State<AddJobPage> {
     if(_validateAndSaveForm()){
       print('form saved name : $_name , rate per hour : $_ratePerHour');
       //TODO : save in firestore
+      final database= Provider.of<Database>(context);
     }
   }
   @override
