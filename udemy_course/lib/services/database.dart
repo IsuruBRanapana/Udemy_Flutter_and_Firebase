@@ -8,13 +8,14 @@ abstract class Database {
   Stream<List<Job>> jobsStream();
 }
 
+String documentIdFromCurrentDateAndTime()=>DateTime.now().toIso8601String();
 class FirestoreDatabase extends Database {
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
   final String uid;
 
   final _service=FirestoreService.instance;
   Future<void> createJob(Job job) async => await _service.setData(
-        path: APIPath.job(uid, 'job_abc'),
+        path: APIPath.job(uid, documentIdFromCurrentDateAndTime()),
         data: job.toMap(),
       );
 

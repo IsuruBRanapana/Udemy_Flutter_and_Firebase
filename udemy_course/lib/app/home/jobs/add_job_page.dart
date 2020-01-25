@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_course/app/home/models/job.dart';
+import 'package:udemy_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:udemy_course/services/database.dart';
+import 'package:flutter/services.dart';
 
 class AddJobPage extends StatefulWidget {
   const AddJobPage({Key key, @required this.database}) : super(key: key);
   final Database database;
 
-
   static Future<void> show(BuildContext context) async {
-    final database= Provider.of<Database>(context);
+    final database = Provider.of<Database>(context);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AddJobPage(database: database,),
+        builder: (context) => AddJobPage(
+          database: database,
+        ),
         fullscreenDialog: true,
       ),
     );
@@ -22,25 +26,34 @@ class AddJobPage extends StatefulWidget {
 }
 
 class _AddJobPageState extends State<AddJobPage> {
-  final _formKey=GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   String _name;
   int _ratePerHour;
 
-  bool _validateAndSaveForm(){
-    final form=_formKey.currentState;
-    if(form.validate()){
+  bool _validateAndSaveForm() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
       form.save();
       return true;
     }
     return false;
   }
-  void _submit(){
-    if(_validateAndSaveForm()){
-      print('form saved name : $_name , rate per hour : $_ratePerHour');
-      //TODO : save in firestore
-      final database= Provider.of<Database>(context);
+
+  Future<void> _submit() async {
+    if (_validateAndSaveForm()) {
+      try {
+        final job = Job(name: _name, ratePerHour: _ratePerHour);
+        await widget.database.createJob(job);
+        Navigator.of(context).pop();
+      } on PlatformException catch (e) {
+        PlatformExceptionAlertDialog(
+          title: 'Operation Failed',
+          exception: e,
+        ).show(context);
+      }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +62,10 @@ class _AddJobPageState extends State<AddJobPage> {
         title: Text('Add Job'),
         actions: <Widget>[
           FlatButton(
-            child: Text('Save', style: TextStyle(fontSize: 18,color: Colors.white),),
+            child: Text(
+              'Save',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
             onPressed: _submit,
           ),
         ],
@@ -87,8 +103,8 @@ class _AddJobPageState extends State<AddJobPage> {
     return [
       TextFormField(
         decoration: InputDecoration(labelText: 'Job Name'),
-        onSaved: (value)=>_name=value,
-        validator: (value)=>value.isNotEmpty ? null : 'Name can\'t be empty',
+        onSaved: (value) => _name = value,
+        validator: (value) => value.isNotEmpty ? null : 'Name can\'t be empty',
       ),
       TextFormField(
         decoration: InputDecoration(labelText: 'Rate per hour'),
@@ -96,7 +112,7 @@ class _AddJobPageState extends State<AddJobPage> {
           signed: false,
           decimal: false,
         ),
-        onSaved:(value)=> _ratePerHour=int.parse(value)??0,
+        onSaved: (value) => _ratePerHour = int.parse(value) ?? 0,
       ),
     ];
   }
