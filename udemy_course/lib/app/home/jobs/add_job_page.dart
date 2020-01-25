@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_course/app/home/models/job.dart';
+import 'package:udemy_course/common_widgets/platform_alert_dialog.dart';
 import 'package:udemy_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:udemy_course/services/database.dart';
 import 'package:flutter/services.dart';
@@ -42,9 +43,19 @@ class _AddJobPageState extends State<AddJobPage> {
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
       try {
-        final job = Job(name: _name, ratePerHour: _ratePerHour);
-        await widget.database.createJob(job);
-        Navigator.of(context).pop();
+        final jobs = await widget.database.jobsStream().first;
+        final allNames = jobs.map((job) => job.name).toList();
+        if (allNames.contains(_name)) {
+          PlatformAlertDialog(
+            title: 'Name Already Used',
+            content: 'Please use another name',
+            defaultActionText: 'Ok',
+          ).show(context);
+        } else {
+          final job = Job(name: _name, ratePerHour: _ratePerHour);
+          await widget.database.createJob(job);
+          Navigator.of(context).pop();
+        }
       } on PlatformException catch (e) {
         PlatformExceptionAlertDialog(
           title: 'Operation Failed',
@@ -112,7 +123,7 @@ class _AddJobPageState extends State<AddJobPage> {
           signed: false,
           decimal: false,
         ),
-        onSaved: (value) => _ratePerHour = int.parse(value) ?? 0,
+        onSaved: (value) => _ratePerHour = int.tryParse(value) ?? 0,
       ),
     ];
   }
