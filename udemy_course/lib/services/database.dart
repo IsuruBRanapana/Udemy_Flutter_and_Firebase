@@ -4,7 +4,7 @@ import 'package:udemy_course/services/apipath.dart';
 import 'package:udemy_course/services/firestore_service.dart';
 
 abstract class Database {
-  Future<void> createJob(Job job);
+  Future<void> setJob(Job job);
   Stream<List<Job>> jobsStream();
 }
 
@@ -14,14 +14,14 @@ class FirestoreDatabase extends Database {
   final String uid;
 
   final _service=FirestoreService.instance;
-  Future<void> createJob(Job job) async => await _service.setData(
-        path: APIPath.job(uid, documentIdFromCurrentDateAndTime()),
+  Future<void> setJob(Job job) async => await _service.setData(
+        path: APIPath.job(uid, job.id),
         data: job.toMap(),
       );
 
   Stream<List<Job>> jobsStream() => _service.collectionStream(
         path: APIPath.jobs(uid),
-        builder: (data) => Job.fromMap(data),
+        builder: (data,documentId) => Job.fromMap(data,documentId),
       );
 
 }

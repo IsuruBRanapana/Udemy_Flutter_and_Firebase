@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:udemy_course/app/home/jobs/add_job_page.dart';
+import 'package:udemy_course/app/home/jobs/edit_job_page.dart';
+import 'package:udemy_course/app/home/jobs/empty_content.dart';
+import 'package:udemy_course/app/home/jobs/job_list_tile.dart';
 import 'package:udemy_course/app/home/models/job.dart';
 import 'package:udemy_course/common_widgets/platform_alert_dialog.dart';
 import 'package:udemy_course/common_widgets/platform_exception_alert_dialog.dart';
@@ -50,26 +52,39 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => AddJobPage.show(context),
+        onPressed: () => EditJobPage.show(context),
       ),
     );
   }
 
   Widget _buildContents(BuildContext context) {
-    final database= Provider.of<Database>(context);
-    return StreamBuilder <List<Job>>(
+    final database = Provider.of<Database>(context);
+    return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
-      builder: (context,snapshot){
-        if (snapshot.hasData){
-          final jobs=snapshot.data;
-          final children= jobs.map((job)=> Text(job.name)).toList();
-          return ListView(
-            children: children,
-          );
-        }if (snapshot.hasError){
-          return Center(child: Text('Some Error Occured'),);
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final jobs = snapshot.data;
+          if (jobs.isNotEmpty) {
+            final children = jobs
+                .map((job) => JobListTile(
+                      job: job,
+                      onTap: () => EditJobPage.show(context, job: job),
+                    ))
+                .toList();
+            return ListView(
+              children: children,
+            );
+          }
+          return EmptyContent();
         }
-        return Center(child: CircularProgressIndicator(),);
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Some Error Occured'),
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
