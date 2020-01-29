@@ -54,6 +54,13 @@ class JobsPage extends StatelessWidget {
           'Jobs',
         ),
         actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            onPressed: () => EditJobPage.show(context,database: Provider.of<Database>(context)),
+          ),
           FlatButton(
             onPressed: () => _confirmSignOut(context),
             child: Text(
@@ -64,10 +71,6 @@ class JobsPage extends StatelessWidget {
         ],
       ),
       body: _buildContents(context),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => EditJobPage.show(context,database: Provider.of<Database>(context)),
-      ),
     );
   }
 
