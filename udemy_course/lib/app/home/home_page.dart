@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_course/app/home/cupertino_home_scaffold.dart';
+import 'package:udemy_course/app/home/jobs/jobs_page.dart';
 import 'package:udemy_course/app/home/tab_items.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,12 +9,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TabItem _currentItem=TabItem.jobs;
+  TabItem _currentTab=TabItem.jobs;
+  Map<TabItem,WidgetBuilder> get widgetbuilders{
+    return {
+      TabItem.jobs:(_)=>JobsPage(),
+      TabItem.entries:(_)=>Container(),
+      TabItem.account:(_)=>Container(),
+    };
+  }
+  void _select(TabItem tabItem) {
+    setState(()=>_currentTab=tabItem);
+  }
   @override
   Widget build(BuildContext context) {
     return CupertinoHomeScaffold(
-      currentTab: _currentItem,
-      onSelectTab: (items){},
+      currentTab: _currentTab,
+      onSelectTab: _select,
+      widgetbuilders: widgetbuilders,
     );
   }
+
+
 }
