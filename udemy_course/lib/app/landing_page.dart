@@ -8,7 +8,7 @@ import 'package:udemy_course/services/database.dart';
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final auth=Provider.of<AuthBase>(context);
+    final auth=Provider.of<AuthBase>(context,listen: false);
     return Container(
       child: StreamBuilder<User>(
           stream: auth.onAuthStateChanged,
