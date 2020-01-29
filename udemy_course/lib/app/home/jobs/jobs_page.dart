@@ -13,26 +13,7 @@ import 'package:udemy_course/services/database.dart';
 import 'package:flutter/services.dart';
 
 class JobsPage extends StatelessWidget {
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      final auth = Provider.of<AuthBase>(context);
-      await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
-  Future<void> _confirmSignOut(BuildContext context) async {
-    final didConfirm = await PlatformAlertDialog(
-      title: 'Confirm Sign Out',
-      content: 'Do you Want to Sign Out',
-      cancelActionText: 'Cancel',
-      defaultActionText: 'Log out',
-    ).show(context);
-    if (didConfirm == true) {
-      _signOut(context);
-    }
-  }
   Future<void> _delete(BuildContext context, Job job) async{
     try{
       final database=Provider.of<Database>(context);
@@ -60,13 +41,6 @@ class JobsPage extends StatelessWidget {
                 color: Colors.white,
               ),
             onPressed: () => EditJobPage.show(context,database: Provider.of<Database>(context)),
-          ),
-          FlatButton(
-            onPressed: () => _confirmSignOut(context),
-            child: Text(
-              'Logout',
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
-            ),
           ),
         ],
       ),
