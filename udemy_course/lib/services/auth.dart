@@ -5,8 +5,13 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class User {
-  User({@required this.uid});
+  User(
+      {@required this.uid,
+      @required this.photoUrl,
+      @required this.displayName});
   final String uid;
+  final String photoUrl;
+  final String displayName;
 }
 
 abstract class AuthBase {
@@ -15,8 +20,8 @@ abstract class AuthBase {
   Future<User> signInAnonymously();
   Future<User> signInWithGoogle();
   Future<User> signInWithFacebook();
-  Future<User> signInWithEmailAndPassword(String email,String password);
-  Future<User> createUserWithEmailAndPassword(String email,String password);
+  Future<User> signInWithEmailAndPassword(String email, String password);
+  Future<User> createUserWithEmailAndPassword(String email, String password);
   Future<void> signOut();
 }
 
@@ -27,7 +32,11 @@ class Auth implements AuthBase {
     if (user == null) {
       return null;
     }
-    return User(uid: user.uid);
+    return User(
+      uid: user.uid,
+      photoUrl: user.photoUrl,
+      displayName: user.displayName,
+    );
   }
 
   @override
@@ -95,14 +104,17 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<User> signInWithEmailAndPassword(String email,String password) async{
-    final authResult=await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    final authResult = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
     return _userFromFirebase(authResult.user);
   }
 
   @override
-  Future<User> createUserWithEmailAndPassword(String email,String password) async{
-    final authResult=await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+  Future<User> createUserWithEmailAndPassword(
+      String email, String password) async {
+    final authResult = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
     return _userFromFirebase(authResult.user);
   }
 
@@ -110,7 +122,7 @@ class Auth implements AuthBase {
   Future<void> signOut() async {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
-    final facebookLogIn=FacebookLogin();
+    final facebookLogIn = FacebookLogin();
     await facebookLogIn.logOut();
     await _firebaseAuth.signOut();
   }
