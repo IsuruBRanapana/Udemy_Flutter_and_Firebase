@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_course/app/home/account/account.dart';
 import 'package:udemy_course/app/home/cupertino_home_scaffold.dart';
+import 'package:udemy_course/app/home/entries/entries_page.dart';
 import 'package:udemy_course/app/home/jobs/jobs_page.dart';
 import 'package:udemy_course/app/home/tab_items.dart';
 
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Map<TabItem,WidgetBuilder> get widgetbuilders{
     return {
       TabItem.jobs:(_)=>JobsPage(),
-      TabItem.entries:(_)=>Container(),
+      TabItem.entries:(context)=>EntriesPage.create(context),
       TabItem.account:(_)=>AccountPage(),
     };
   }
